@@ -1,0 +1,22 @@
+{
+  "name": "transport-logistics-platform",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Online platform for transport logistics coursework project.",
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm:dev --workspace server\" \"npm:dev --workspace client\"",
+    "build": "npm run build --workspace server && npm run build --workspace client",
+    "typecheck": "npm run typecheck --workspace server && npm run typecheck --workspace client",
+    "prisma:generate": "node scripts/run-with-env.mjs prisma generate --schema server/prisma/schema.prisma",
+    "prisma:migrate": "node scripts/run-with-env.mjs prisma migrate dev --schema server/prisma/schema.prisma --name init",
+    "seed": "node scripts/run-with-env.mjs tsx server/prisma/seed.ts"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "dotenv": "^16.4.7"
+  }
+}
