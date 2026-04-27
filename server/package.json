@@ -3,12 +3,15 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
+  "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsc",
-    "typecheck": "tsc --noEmit",
-    "prisma:generate": "prisma generate --schema prisma/schema.prisma",
-    "seed": "tsx prisma/seed.ts"
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "prisma:generate": "node ../scripts/run-with-env.mjs prisma generate --schema server/prisma/schema.prisma",
+    "prisma:migrate": "node ../scripts/run-with-env.mjs prisma migrate dev --schema server/prisma/schema.prisma --name init",
+    "seed": "node ../scripts/run-with-env.mjs tsx server/prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.6.0",
