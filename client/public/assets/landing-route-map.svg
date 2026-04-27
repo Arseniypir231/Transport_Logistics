@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="760" viewBox="0 0 980 760" role="img" aria-labelledby="title desc">
+  <title id="title">Logistics route map</title>
+  <desc id="desc">Stylized map with a delivery route, warehouse and trucks.</desc>
+  <defs>
+    <linearGradient id="mapBg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#f8fbf8"/>
+      <stop offset="1" stop-color="#deebe3"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="22" stdDeviation="24" flood-color="#17211c" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+  <rect width="980" height="760" rx="44" fill="url(#mapBg)"/>
+  <path d="M120 130 H870 M80 270 H910 M130 420 H860 M100 580 H900" stroke="#cddbd2" stroke-width="10" stroke-linecap="round" opacity="0.7"/>
+  <path d="M210 650 C180 530 290 470 420 448 C570 424 560 304 682 268 C760 246 800 188 806 104" fill="none" stroke="#0d8d77" stroke-width="18" stroke-linecap="round"/>
+  <path d="M210 650 C180 530 290 470 420 448 C570 424 560 304 682 268 C760 246 800 188 806 104" fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round" stroke-dasharray="26 26"/>
+  <g filter="url(#shadow)">
+    <rect x="104" y="92" width="250" height="152" rx="24" fill="#ffffff"/>
+    <rect x="134" y="128" width="72" height="60" rx="10" fill="#d99c25"/>
+    <rect x="224" y="128" width="96" height="60" rx="10" fill="#0d8d77"/>
+    <rect x="134" y="202" width="186" height="14" rx="7" fill="#d8e3db"/>
+    <rect x="646" y="462" width="248" height="164" rx="24" fill="#ffffff"/>
+    <rect x="680" y="504" width="168" height="18" rx="9" fill="#0d8d77"/>
+    <rect x="680" y="548" width="126" height="18" rx="9" fill="#d8e3db"/>
+    <rect x="680" y="590" width="188" height="18" rx="9" fill="#d8e3db"/>
+  </g>
+  <circle cx="210" cy="650" r="24" fill="#0d8d77"/>
+  <circle cx="420" cy="448" r="24" fill="#d99c25"/>
+  <circle cx="682" cy="268" r="24" fill="#0d8d77"/>
+  <circle cx="806" cy="104" r="24" fill="#e95f78"/>
+  <g transform="translate(462 286)" filter="url(#shadow)">
+    <rect x="0" y="34" width="156" height="58" rx="14" fill="#10251f"/>
+    <rect x="104" y="14" width="86" height="78" rx="14" fill="#0d8d77"/>
+    <circle cx="42" cy="104" r="20" fill="#17211c"/>
+    <circle cx="144" cy="104" r="20" fill="#17211c"/>
+    <circle cx="42" cy="104" r="8" fill="#f7fbf8"/>
+    <circle cx="144" cy="104" r="8" fill="#f7fbf8"/>
+  </g>
+</svg>

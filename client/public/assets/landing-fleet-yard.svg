@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1060" height="760" viewBox="0 0 1060 760" role="img" aria-labelledby="title desc">
+  <title id="title">Fleet yard illustration</title>
+  <desc id="desc">Stylized warehouse yard with parked trucks and logistics analytics cards.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#173c33"/>
+      <stop offset="1" stop-color="#0d8d77"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="24" stdDeviation="24" flood-color="#071610" flood-opacity="0.24"/>
+    </filter>
+  </defs>
+  <rect width="1060" height="760" rx="44" fill="#eef5f0"/>
+  <rect width="1060" height="324" rx="44" fill="url(#sky)"/>
+  <path d="M0 286 C180 236 300 316 486 270 C680 222 818 244 1060 194 V760 H0 Z" fill="#dbe9df"/>
+  <g filter="url(#shadow)">
+    <rect x="118" y="210" width="466" height="214" rx="12" fill="#ffffff"/>
+    <path d="M118 210 L352 104 L584 210 Z" fill="#d99c25"/>
+    <rect x="178" y="276" width="94" height="148" rx="10" fill="#173c33"/>
+    <rect x="310" y="276" width="94" height="148" rx="10" fill="#173c33"/>
+    <rect x="442" y="276" width="94" height="148" rx="10" fill="#173c33"/>
+  </g>
+  <g transform="translate(620 430)" filter="url(#shadow)">
+    <rect x="0" y="36" width="236" height="74" rx="16" fill="#10251f"/>
+    <rect x="166" y="8" width="126" height="102" rx="16" fill="#0d8d77"/>
+    <circle cx="66" cy="126" r="26" fill="#17211c"/>
+    <circle cx="226" cy="126" r="26" fill="#17211c"/>
+    <circle cx="66" cy="126" r="10" fill="#f7fbf8"/>
+    <circle cx="226" cy="126" r="10" fill="#f7fbf8"/>
+  </g>
+  <g transform="translate(166 500)" filter="url(#shadow)">
+    <rect x="0" y="30" width="190" height="64" rx="16" fill="#ffffff"/>
+    <rect x="132" y="8" width="108" height="86" rx="16" fill="#d99c25"/>
+    <circle cx="54" cy="112" r="22" fill="#17211c"/>
+    <circle cx="178" cy="112" r="22" fill="#17211c"/>
+    <circle cx="54" cy="112" r="8" fill="#f7fbf8"/>
+    <circle cx="178" cy="112" r="8" fill="#f7fbf8"/>
+  </g>
+  <g filter="url(#shadow)">
+    <rect x="710" y="112" width="244" height="220" rx="28" fill="#ffffff"/>
+    <rect x="744" y="154" width="106" height="16" rx="8" fill="#65736b"/>
+    <rect x="744" y="196" width="154" height="34" rx="17" fill="#0d8d77"/>
+    <rect x="744" y="260" width="176" height="18" rx="9" fill="#dbe9df"/>
+    <rect x="744" y="292" width="124" height="18" rx="9" fill="#dbe9df"/>
+  </g>
+</svg>
