@@ -1,0 +1,308 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum CompanyType {
+  CLIENT
+  CARRIER
+  PARTNER
+}
+
+enum UserStatus {
+  ACTIVE
+  INVITED
+  BLOCKED
+}
+
+enum Priority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum OrderStatus {
+  DRAFT
+  NEW
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum ShipmentStatus {
+  PLANNED
+  LOADING
+  IN_TRANSIT
+  DELIVERED
+  DELAYED
+  CANCELLED
+}
+
+enum VehicleStatus {
+  AVAILABLE
+  ASSIGNED
+  MAINTENANCE
+}
+
+enum DriverStatus {
+  AVAILABLE
+  ON_ROUTE
+  VACATION
+}
+
+enum CargoType {
+  PALLET
+  BULK
+  CONTAINER
+  REFRIGERATED
+  HAZARDOUS
+}
+
+enum EventType {
+  CREATED
+  LOADED
+  DEPARTED
+  CHECKPOINT
+  ARRIVED
+  DELIVERED
+  PROBLEM
+}
+
+enum ReportType {
+  SHIPMENT_SUMMARY
+  FLEET_UTILIZATION
+}
+
+enum ReportDelivery {
+  DOWNLOAD
+  EMAIL
+}
+
+model Role {
+  id          String @id @default(cuid())
+  slug        String @unique
+  name        String
+  description String
+  users       User[]
+
+  @@map("roles")
+}
+
+model Company {
+  id           String      @id @default(cuid())
+  name         String
+  type         CompanyType
+  taxNumber    String?     @unique
+  address      String?
+  contactEmail String?
+  phone        String?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  users            User[]
+  clientOrders     LogisticsOrder[] @relation("ClientOrders")
+  carrierShipments Shipment[]       @relation("CarrierShipments")
+  vehicles         Vehicle[]        @relation("CarrierVehicles")
+  drivers          Driver[]         @relation("CarrierDrivers")
+
+  @@map("companies")
+}
+
+model User {
+  id           String     @id @default(cuid())
+  email        String     @unique
+  passwordHash String
+  name         String
+  status       UserStatus @default(ACTIVE)
+  roleId       String
+  companyId    String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  role           Role             @relation(fields: [roleId], references: [id])
+  company        Company?         @relation(fields: [companyId], references: [id])
+  createdOrders  LogisticsOrder[] @relation("OrderCreator")
+  driverProfile  Driver?
+  shipmentEvents ShipmentEvent[]  @relation("EventCreator")
+  reportRequests ReportRequest[]
+
+  @@map("users")
+}
+
+model Cargo {
+  id              String           @id @default(cuid())
+  name            String
+  type            CargoType
+  weightKg        Decimal          @db.Decimal(10, 2)
+  volumeM3        Decimal          @db.Decimal(10, 2)
+  temperatureFrom Int?
+  temperatureTo   Int?
+  hazardClass     String?
+  orders          LogisticsOrder[]
+
+  @@map("cargo")
+}
+
+model LogisticsOrder {
+  id              String      @id @default(cuid())
+  code            String      @unique
+  title           String
+  status          OrderStatus @default(NEW)
+  priority        Priority    @default(NORMAL)
+  pickupAddress   String
+  deliveryAddress String
+  pickupDate      DateTime
+  deliveryDate    DateTime
+  price           Decimal     @db.Decimal(12, 2)
+  notes           String?
+  clientId        String
+  cargoId         String
+  createdById     String
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  client    Company    @relation("ClientOrders", fields: [clientId], references: [id])
+  cargo     Cargo      @relation(fields: [cargoId], references: [id])
+  createdBy User       @relation("OrderCreator", fields: [createdById], references: [id])
+  shipments Shipment[]
+
+  @@map("orders")
+}
+
+model Vehicle {
+  id          String        @id @default(cuid())
+  plateNumber String        @unique
+  type        String
+  make        String?
+  model       String?
+  year        Int?
+  capacityKg  Decimal       @db.Decimal(10, 2)
+  capacityM3  Decimal       @db.Decimal(10, 2)
+  status      VehicleStatus @default(AVAILABLE)
+  companyId   String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  company   Company    @relation("CarrierVehicles", fields: [companyId], references: [id])
+  shipments Shipment[]
+
+  @@map("vehicles")
+}
+
+model Driver {
+  id            String       @id @default(cuid())
+  licenseNumber String       @unique
+  name          String
+  phone         String
+  email         String?
+  rating        Decimal      @default(5) @db.Decimal(3, 2)
+  status        DriverStatus @default(AVAILABLE)
+  companyId     String
+  userId        String?      @unique
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  company   Company    @relation("CarrierDrivers", fields: [companyId], references: [id])
+  user      User?      @relation(fields: [userId], references: [id])
+  shipments Shipment[]
+
+  @@map("drivers")
+}
+
+model Route {
+  id             String   @id @default(cuid())
+  name           String
+  origin         String
+  destination    String
+  distanceKm     Decimal  @db.Decimal(10, 2)
+  estimatedHours Int
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  points    RoutePoint[]
+  shipments Shipment[]
+
+  @@map("routes")
+}
+
+model RoutePoint {
+  id             String    @id @default(cuid())
+  routeId        String
+  sequence       Int
+  label          String
+  address        String
+  latitude       Decimal   @db.Decimal(9, 6)
+  longitude      Decimal   @db.Decimal(9, 6)
+  plannedArrival DateTime?
+  createdAt      DateTime  @default(now())
+
+  route Route @relation(fields: [routeId], references: [id], onDelete: Cascade)
+
+  @@unique([routeId, sequence])
+  @@map("route_points")
+}
+
+model Shipment {
+  id               String         @id @default(cuid())
+  trackingNumber   String         @unique
+  status           ShipmentStatus @default(PLANNED)
+  orderId          String
+  carrierId        String
+  driverId         String
+  vehicleId        String
+  routeId          String?
+  plannedStart     DateTime
+  actualStart      DateTime?
+  plannedFinish    DateTime
+  actualFinish     DateTime?
+  currentLatitude  Decimal?       @db.Decimal(9, 6)
+  currentLongitude Decimal?       @db.Decimal(9, 6)
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  order   LogisticsOrder  @relation(fields: [orderId], references: [id])
+  carrier Company         @relation("CarrierShipments", fields: [carrierId], references: [id])
+  driver  Driver          @relation(fields: [driverId], references: [id])
+  vehicle Vehicle         @relation(fields: [vehicleId], references: [id])
+  route   Route?          @relation(fields: [routeId], references: [id])
+  events  ShipmentEvent[]
+
+  @@map("shipments")
+}
+
+model ShipmentEvent {
+  id          String    @id @default(cuid())
+  shipmentId  String
+  type        EventType
+  message     String
+  location    String?
+  latitude    Decimal?  @db.Decimal(9, 6)
+  longitude   Decimal?  @db.Decimal(9, 6)
+  createdById String?
+  createdAt   DateTime  @default(now())
+
+  shipment  Shipment @relation(fields: [shipmentId], references: [id], onDelete: Cascade)
+  createdBy User?    @relation("EventCreator", fields: [createdById], references: [id])
+
+  @@map("shipment_events")
+}
+
+model ReportRequest {
+  id             String         @id @default(cuid())
+  type           ReportType
+  delivery       ReportDelivery
+  recipientEmail String?
+  fileName       String?
+  status         String         @default("READY")
+  createdById    String
+  createdAt      DateTime       @default(now())
+
+  createdBy User @relation(fields: [createdById], references: [id])
+
+  @@map("report_requests")
+}
