@@ -12,7 +12,8 @@
     "build": "npm run build --workspace server && npm run build --workspace client",
     "typecheck": "npm run typecheck --workspace server && npm run typecheck --workspace client",
     "prisma:generate": "node scripts/run-with-env.mjs prisma generate --schema server/prisma/schema.prisma",
-    "prisma:migrate": "node scripts/run-with-env.mjs prisma migrate dev --schema server/prisma/schema.prisma --name init",
+    "prisma:migrate": "node scripts/run-with-env.mjs prisma db push --schema server/prisma/schema.prisma",
+    "prisma:push": "node scripts/run-with-env.mjs prisma db push --schema server/prisma/schema.prisma",
     "seed": "node scripts/run-with-env.mjs tsx server/prisma/seed.ts"
   },
   "devDependencies": {
